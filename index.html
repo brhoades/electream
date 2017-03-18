@@ -44,9 +44,17 @@
       require('./renderer.js')
       const ffmpeg = require('./ffmpeg.js')
       const layout = require('./layout.js')
+      const econfig = require('electron-config');
+      const config = new econfig();
+
       ffmpeg.displayDevices("#video_device", "#audio_device");
+      window.$ = window.jQuery = require('jQuery');
 
       layout.show("#pane_main");
+
+      $('#ffmpeg_path').bind('input', function() {
+        config.set("ffmpeg_path", $(this).val());
+      });
     </script>
   </body>
 </html>

@@ -6,6 +6,7 @@ const BrowserWindow = electron.BrowserWindow
 
 const path = require('path')
 const url = require('url')
+const $ = require('jQuery');
 const econfig = require('electron-config');
 const config = new econfig();
 
@@ -45,9 +46,9 @@ app.on('ready', createWindow)
 app.on('window-all-closed', function () {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
+  // if (process.platform !== 'darwin') {
+  //  app.quit()
+  // }
 })
 
 app.on('activate', function () {
@@ -56,6 +57,8 @@ app.on('activate', function () {
   if (mainWindow === null) {
     createWindow()
   }
+
+  mainWindow.$("#ffmpeg_path").val(config.get("ffmpeg_path"));
 })
 
 // In this file you can include the rest of your app's specific main process
