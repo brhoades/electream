@@ -63,29 +63,29 @@ function listDevices(cb) {
 // returns ffmpeg
 function stream(video_device, audio_device, destination) {
   // TODO platform / custom ffmpeg
-  const ffmpeg = spawn("ffmpeg", ["-f", "avfoundation",
+  var ffmpeg = spawn("ffmpeg", ["-f", "avfoundation",
                                   "-framerate", "30",
                                   "-i", video_device,
-                                  "-vcodec", "libx264",
-                                  "-tune", "lowlatency",
+                                  // "-vcodec", "libx264",
+                                  // "-tune", "nolatency",
                                   "-f", "flv", destination]);
   ffmpeg.stdout.on('data', function(data) {
-    console.log(data);
-    $("#page_log_content").append(data);
+    $("#pane_log_content").append(`${data}<br />`);
   });
 
   ffmpeg.stderr.on('data', function(data) {
     let msg = `ERROR: ${data}`;
 
-    $("#page_log_content").append(msg);
-    console.log(msg);
+    $("#pane_log_content").append(`${msg}<br />`);
   });
 
   ffmpeg.on('close', function(code) {
     let msg = `ffmpeg exited with code '${code}'`;
-    $("#page_log_content").append(msg);
-    console.log(msg);
+
+    $("#pane_log_content").append(`${msg}<br />`);
   });
+
+  return ffmpeg;
 }
 
 module.exports = {

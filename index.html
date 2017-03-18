@@ -25,7 +25,8 @@
               Destination (rtmp): <input type="text" name="output" id="output_stream"><br />
               <br />
               <br />
-              <button class="btn btn-large btn-default" onclick="startStream();">Stream</button>
+              <button class="btn btn-large btn-default" onclick="startStream();">Stream</button><br>
+              <button class="btn btn-large btn-default" onclick="stopStream();">Stop</button><br>
             </div>
 
             <div id="pane_config" class="pane-content">
@@ -61,7 +62,8 @@
         config.set("ffmpeg_path", $(this).val());
       });
 
-      startStream = util.startStream;
+      startStream = util.start;
+      stopStream = util.stop;
     </script>
   </body>
 </html>

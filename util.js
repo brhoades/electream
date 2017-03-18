@@ -2,17 +2,35 @@
 const ffmpeg = require('./ffmpeg.js')
 const layout = require('./layout.js')
 const $ = require('jQuery');
-var ffmpeg_proc = null;
+// returns the spawned child process.
+module.exports = {};
 
+(function(exports) {
+  var ffmpeg_proc = null;
 
-function startStream() {
-  var video = $("#video_device").val(),
-      audio = $("#audio_device").val(),
-      destination = $("#output_stream").val();
+  exports.start = function() {
+    if(ffmpeg_proc != null) {
+      console.log("Stream is still running.");
+      return ffmpeg_proc;
+    }
 
-  ffmpeg_proc = ffmpeg.stream(video, audio, destination);
-}
+    var video = $("#video_device").val(),
+        audio = $("#audio_device").val(),
+        destination = $("#output_stream").val();
 
-module.exports = {
-  startStream: startStream
-};
+    ffmpeg_proc = ffmpeg.stream(video, audio, destination);
+
+    return ffmpeg_proc;
+  }
+
+  exports.stop = function() {
+    if(ffmpeg_proc != null) {
+      ffmpeg_proc.kill();
+      console.log("Killed");
+
+      ffmpeg_proc = null;
+    } else {
+      console.log("Proc is null");
+    }
+  }
+})(module.exports);
