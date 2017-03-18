@@ -63,12 +63,21 @@ function listDevices(cb) {
 // returns ffmpeg
 function stream(video_device, audio_device, destination) {
   // TODO platform / custom ffmpeg
-  var ffmpeg = spawn("ffmpeg", ["-f", "avfoundation",
-                                  "-framerate", "30",
-                                  "-i", video_device,
-                                  // "-vcodec", "libx264",
-                                  // "-tune", "nolatency",
-                                  "-f", "flv", destination]);
+  var ffmpeg = null;
+  var plat = os.platform();
+
+  if(plat == "darwin") {
+    ffmpeg = spawn("ffmpeg", [
+      "-f", "avfoundation",
+      "-framerate", "30", // ???????
+      "-i", video_device,
+      // "-vcodec", "libx264",
+      // "-tune", "nolatency",
+      "-f", "flv", destination
+    ]);
+  } else if(plat == "win32") {
+  }
+
   ffmpeg.stdout.on('data', function(data) {
     $("#pane_log_content").append(`${data}<br />`);
   });

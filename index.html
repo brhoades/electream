@@ -22,7 +22,7 @@
               Input Video Device: <select id="video_device"></select> <br />
               Input Audio Device: <select id="audio_device"></select> <br />
               <br />
-              Destination (rtmp): <input type="text" name="output" id="output_stream"><br />
+              Destination (rtmp): <input type="text" class="save-field" id="output_stream"><br />
               <br />
               <br />
               <button class="btn btn-large btn-default" onclick="startStream();">Stream</button><br>
@@ -31,7 +31,7 @@
 
             <div id="pane_config" class="pane-content">
               <h1>Eletream - Config</h1>
-              ffmpeg path: <input type="file" id="ffmpeg_path">
+              ffmpeg path: <input class="save-field" type="file" id="ffmpeg_path">
             </div>
 
             <div id="pane_log" class="pane-content">
@@ -56,10 +56,18 @@
       window.$ = window.jQuery = require('jQuery');
 
       layout.show("#pane_main");
-      $("#ffmpeg_path").val(config.get("ffmpeg_path"));
 
-      $("#ffmpeg_path").bind("input", function() {
-        config.set("ffmpeg_path", $(this).val());
+      $(".save-field").each(function(i, e) {
+        e = $(e);
+        var id = e.attr("id");
+
+        // load all values from config
+        e.val(config.get(id));
+
+        e.bind("input", function() {
+          config.set(id, e.val());
+          console.log(`Saved ${id} val of ${e.val()}`);
+        });
       });
 
       startStream = util.start;
