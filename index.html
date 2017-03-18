@@ -5,29 +5,48 @@
     <title>Eletream</title>
 
     <link rel="stylesheet" href="assets/css/photon.css">
+    <link rel="stylesheet" href="assets/css/stream.css">
   </head>
   <body>
     <div class="window">
       <div class="window-content">
         <div class="pane-group">
-          <div class="pane-mini sidebar">Main</div>
+          <div class="pane-mini sidebar">
+            <a href="#" onclick="layout.show('#pane_main');">Main</a><br />
+            <a href="#" onclick="layout.show('#pane_config');">Config</a><br />
+            <a href="#" onclick="layout.show('#pane_log');">Log</a><br />
+          </div>
           <div class="pane">
-            <h1>Eletream</h1>
-            Input Video Device: <select id="video_device"></select> <br />
-            Input Audio Device: <select id="audio_device"></select> <br />
+            <div id="pane_main" class="pane-content">
+              <h1>Eletream</h1>
+              Input Video Device: <select id="video_device"></select> <br />
+              Input Audio Device: <select id="audio_device"></select> <br />
+              <br />
+              Destination (rtmp): <input type="text" name="output">
+            </div>
 
-            <br />
-            Destination (rtmp): <input type="text" name="output">
+            <div id="pane_config" class="pane-content">
+              <h1>Eletream - Config</h1>
+              ffmpeg path: <input type="file" id="ffmpeg_path">
+            </div>
+
+            <div id="pane_log" class="pane-content">
+              <h1>Electream - Log</h1>
+              <div id="pane_log_content" style="overflow: none; width: 100%; height: 100%;"></div>
+            </div>
           </div>
         </div>
       </div>
-
-      <script>
-        // You can also require other files to run in this process
-        require('./renderer.js')
-        const ffmpeg = require('./ffmpeg.js')
-        ffmpeg.displayDevices("#video_device", "#audio_device");
-      </script>
     </div>
+
+    <script>
+      // You can also require other files to run in this process
+      require('./renderer.js')
+      const ffmpeg = require('./ffmpeg.js')
+      const layout = require('./layout.js')
+      ffmpeg.displayDevices("#video_device", "#audio_device");
+
+      layout.show("#pane_main");
+    </script>
   </body>
 </html>
