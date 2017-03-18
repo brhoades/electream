@@ -54,7 +54,9 @@ function listDevices(cb) {
       cb(error);
     });
   } else if(plat == "win32") {
-    exec("ffmpeg -list_devices true -f dshow -i dummy", function(error, output, code) {
+    let ffmpeg = $("#ffmpeg_path");
+
+    exec(`${ffmpeg} -list_devices true -f dshow -i dummy`, function(error, output, code) {
       cb(error);
     });
   }
