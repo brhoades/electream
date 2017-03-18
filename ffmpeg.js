@@ -1,5 +1,6 @@
 const exec = require('child_process').exec;
-var $ = require('jQuery');
+const $ = require('jQuery');
+const os = require('os');
 
 function displayDevices(video_cont, audio_cont) {
   listFFMPEGDevices(function(video, audio) {
@@ -44,11 +45,17 @@ function listFFMPEGDevices(cb) {
 
 // cb takes output
 function listDevices(cb) {
-  // TODO: Win/Lin
-  // OS X
-  exec("ffmpeg -v info -f avfoundation -list_devices true -i \"\"", function(error, output, code) {
-    cb(error);
-  });
+  var plat = os.platform();
+
+  if(plat == "darwin") {
+    exec("ffmpeg -v info -f avfoundation -list_devices true -i \"\"", function(error, output, code) {
+      cb(error);
+    });
+  } else if(plat == "win32") {
+    exec("ffmpeg -list_devices true -f dshow -i dummy", function(error, output, code) {
+      cb(error);
+    });
+  }
 }
 
 module.exports = {
