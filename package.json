@@ -1,21 +1,16 @@
 {
-  "name": "electron-quick-start",
-  "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "name": "elecstream",
+  "version": "0.1",
+  "description": "A lightweight rtmp streaming program.",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/brhoades/elecstream",
   "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
   ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
+  "author": "Billy Rhoades",
+  "license": "MIT",
   "devDependencies": {
     "electron": "^1.4.1"
   },
