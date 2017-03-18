@@ -33,7 +33,7 @@
             <div id="pane_config" class="pane-content">
               <h1>Eletream - Config</h1>
               ffmpeg path<br>
-              <input class="save-field" id="ffmpeg_path" style="width: 90%;"> <button class="btn btn-primary" onclick="util.getFile('#ffmpeg_path');">Change</button>
+              <input class="save-field" id="ffmpeg_path" style="width: 90%;"> <button class="btn btn-primary" onclick="util.getFile('#ffmpeg_path'); refresh();">Change</button>
               <script>
               </script>
             </div>
@@ -64,6 +64,7 @@
 
       layout.show("#pane_main");
 
+      // all save fields have a bound event to save output on change
       $(".save-field").each(function(i, e) {
         e = $(e);
         var id = e.attr("id");
