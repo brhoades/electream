@@ -1,20 +1,51 @@
 {
   "name": "elecstream",
-  "version": "0.1",
+  "version": "0.1.0",
   "description": "A lightweight rtmp streaming program.",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "yarn install && electron .",
+    "pack": "build --dir",
+    "dist": "build",
+    "release": "build"
+  },
+  "build": {
+    "appId": "es.brod.electream",
+    "files": [
+      "*.js",
+      "*.html",
+      "assets",
+      "node_modules"
+    ],
+    "mac": {
+      "category": "public.app-category.graphics-design"
+    },
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    }
   },
   "repository": "https://github.com/brhoades/elecstream",
-  "keywords": [
-  ],
+  "keywords": [],
   "author": "Billy Rhoades",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^1.4.1"
+    "electron": "^1.4.1",
+    "electron-builder": "^15.6.2",
+    "rimraf": "^2.6.1"
   },
   "dependencies": {
-    "electron-config": "^0.2.1"
+    "electron-config": "^0.2.1",
+    "jQuery": "^1.7.4"
   }
 }

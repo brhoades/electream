@@ -19,6 +19,7 @@
           <div class="pane">
             <div id="pane_main" class="pane-content">
               <h1>Eletream</h1>
+              Devices&nbsp;<span class="btn-primary icon icon-loop" onclick="refresh();"></span><br />
               Input Video Device: <select id="video_device"></select> <br />
               Input Audio Device: <select id="audio_device"></select> <br />
               <br />
@@ -52,7 +53,10 @@
       const econfig = require('electron-config');
       const config = new econfig();
 
-      ffmpeg.displayDevices("#video_device", "#audio_device");
+      function refresh() {
+        ffmpeg.displayDevices("#video_device", "#audio_device");
+      }
+      refresh();
       window.$ = window.jQuery = require('jQuery');
 
       layout.show("#pane_main");

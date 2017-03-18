@@ -8,6 +8,8 @@ function displayDevices(video_cont, audio_cont) {
   listFFMPEGDevices(function(video, audio) {
     var vlist = $(video_cont);
     var alist = $(audio_cont);
+    alist.html("");
+    vlist.html("");
 
     video.forEach(function(e) {
       vlist.append("<option value=\"" + e + "\">" + e + "</option>");
@@ -22,12 +24,22 @@ function displayDevices(video_cont, audio_cont) {
 // cb takes (array of video device names, array of audio device names)
 function listFFMPEGDevices(cb) {
   listDevices(function(output) {
-    var deviceregex = /\[([0-9]+)\]\s(.*)/g;
-    var match = deviceregex.exec(output);
+    var deviceregexmac = /\[([0-9]+)\]\s(.+)/g;
+    var deviceregexwin = /\s{2}"([A-Za-z0-9\- ]+)"/g;
+    var deviceregex = null;
     var lastNumber = -1;
     var video = [];
     var audio = [];
 
+    var plat = os.platform();
+
+    if(plat == "darwin") {
+      deviceregex = deviceregexmac;
+    } else if(plat == "win32") {
+      deviceregex = deviceregexwin;
+    }
+
+    var match = deviceregex.exec(output);
     while(match != null) {
       // ffmpeg provides numbers which reset on audio devices. Once we see an old number,
       // we're doing audio.
@@ -54,7 +66,7 @@ function listDevices(cb) {
       cb(error);
     });
   } else if(plat == "win32") {
-    let ffmpeg = $("#ffmpeg_path");
+    let ffmpeg = $("#ffmpeg_path").val();
 
     exec(`${ffmpeg} -list_devices true -f dshow -i dummy`, function(error, output, code) {
       cb(error);
@@ -78,6 +90,7 @@ function stream(video_device, audio_device, destination) {
       "-f", "flv", destination
     ]);
   } else if(plat == "win32") {
+    let ffmpeg = $("#ffmpeg_path").val();
   }
 
   ffmpeg.stdout.on('data', function(data) {
