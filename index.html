@@ -3,21 +3,31 @@
   <head>
     <meta charset="UTF-8">
     <title>Eletream</title>
+
+    <link rel="stylesheet" href="assets/css/photon.css">
   </head>
   <body>
-    <h1>Eletream</h1>
+    <div class="window">
+      <div class="window-content">
+        <div class="pane-group">
+          <div class="pane-mini sidebar">Main</div>
+          <div class="pane">
+            <h1>Eletream</h1>
+            Input Video Device: <select id="video_device"></select> <br />
+            Input Audio Device: <select id="audio_device"></select> <br />
 
-    Input Video Device: <select id="video_device"></select> <br />
-    Input Audio Device: <select id="audio_device"></select> <br />
+            <br />
+            Destination (rtmp): <input type="text" name="output">
+          </div>
+        </div>
+      </div>
 
-    <br />
-    Destination (rtmp): <input type="text" name="output">
+      <script>
+        // You can also require other files to run in this process
+        require('./renderer.js')
+        const ffmpeg = require('./ffmpeg.js')
+        ffmpeg.displayDevices("#video_device", "#audio_device");
+      </script>
+    </div>
   </body>
-
-  <script>
-    // You can also require other files to run in this process
-    require('./renderer.js')
-    const ffmpeg = require('./ffmpeg.js')
-    ffmpeg.displayDevices("#video_device", "#audio_device");
-  </script>
 </html>
