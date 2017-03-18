@@ -22,7 +22,10 @@
               Input Video Device: <select id="video_device"></select> <br />
               Input Audio Device: <select id="audio_device"></select> <br />
               <br />
-              Destination (rtmp): <input type="text" name="output">
+              Destination (rtmp): <input type="text" name="output" id="output_stream"><br />
+              <br />
+              <br />
+              <button class="btn btn-large btn-default" onclick="startStream();">Stream</button>
             </div>
 
             <div id="pane_config" class="pane-content">
@@ -44,6 +47,7 @@
       require('./renderer.js')
       const ffmpeg = require('./ffmpeg.js')
       const layout = require('./layout.js')
+      const util = require('./util.js')
       const econfig = require('electron-config');
       const config = new econfig();
 
@@ -51,10 +55,13 @@
       window.$ = window.jQuery = require('jQuery');
 
       layout.show("#pane_main");
+      $("#ffmpeg_path").val(config.get("ffmpeg_path"));
 
-      $('#ffmpeg_path').bind('input', function() {
+      $("#ffmpeg_path").bind("input", function() {
         config.set("ffmpeg_path", $(this).val());
       });
+
+      startStream = util.startStream;
     </script>
   </body>
 </html>

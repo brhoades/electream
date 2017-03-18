@@ -6,7 +6,6 @@ const BrowserWindow = electron.BrowserWindow
 
 const path = require('path')
 const url = require('url')
-const $ = require('jQuery');
 const econfig = require('electron-config');
 const config = new econfig();
 
@@ -57,8 +56,6 @@ app.on('activate', function () {
   if (mainWindow === null) {
     createWindow()
   }
-
-  mainWindow.$("#ffmpeg_path").val(config.get("ffmpeg_path"));
 })
 
 // In this file you can include the rest of your app's specific main process

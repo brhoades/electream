@@ -1,6 +1,8 @@
 const exec = require('child_process').exec;
+const spawn = require('child_process').spawn;
 const $ = require('jQuery');
 const os = require('os');
+
 
 function displayDevices(video_cont, audio_cont) {
   listFFMPEGDevices(function(video, audio) {
@@ -58,6 +60,35 @@ function listDevices(cb) {
   }
 }
 
+// returns ffmpeg
+function stream(video_device, audio_device, destination) {
+  // TODO platform / custom ffmpeg
+  const ffmpeg = spawn("ffmpeg", ["-f", "avfoundation",
+                                  "-framerate", "30",
+                                  "-i", video_device,
+                                  "-vcodec", "libx264",
+                                  "-tune", "lowlatency",
+                                  "-f", "flv", destination]);
+  ffmpeg.stdout.on('data', function(data) {
+    console.log(data);
+    $("#page_log_content").append(data);
+  });
+
+  ffmpeg.stderr.on('data', function(data) {
+    let msg = `ERROR: ${data}`;
+
+    $("#page_log_content").append(msg);
+    console.log(msg);
+  });
+
+  ffmpeg.on('close', function(code) {
+    let msg = `ffmpeg exited with code '${code}'`;
+    $("#page_log_content").append(msg);
+    console.log(msg);
+  });
+}
+
 module.exports = {
-  displayDevices: displayDevices
+  displayDevices: displayDevices,
+  stream: stream
 };
