@@ -1,42 +1,44 @@
 const exec = require('child_process').exec;
 var $ = require('jQuery');
 
-
-function displayVideoDevices(container) {
-  listVideoDevices(function(video) {
-    console.log(video);
-    var list = $(container);
+function displayDevices(video_cont, audio_cont) {
+  listFFMPEGDevices(function(video, audio) {
+    var vlist = $(video_cont);
+    var alist = $(audio_cont);
 
     video.forEach(function(e) {
-      list.append("<option value=\"" + e + "\">" + e + "</option>");
+      vlist.append("<option value=\"" + e + "\">" + e + "</option>");
+    });
+
+    audio.forEach(function(e) {
+      alist.append("<option value=\"" + e + "\">" + e + "</option>");
     });
   });
 }
 
-// cb takes array of video device names
-function listVideoDevices(cb) {
+// cb takes (array of video device names, array of audio device names)
+function listFFMPEGDevices(cb) {
   listDevices(function(output) {
     var deviceregex = /\[([0-9]+)\]\s(.*)/g;
     var match = deviceregex.exec(output);
     var lastNumber = -1;
     var video = [];
+    var audio = [];
 
-    console.log(output);
     while(match != null) {
-      console.log(match);
       // ffmpeg provides numbers which reset on audio devices. Once we see an old number,
-      // exit.
-      if(lastNumber <= match[1]) {
+      // we're doing audio.
+      if(lastNumber <= match[1] && audio.length == 0) {
         video.push(match[2]);
         lastNumber = match[1];
       } else {
-        break;
+        audio.push(match[2]);
       }
 
       match = deviceregex.exec(output);
     }
 
-    cb(video);
+    cb(video, audio);
   });
 }
 
@@ -50,5 +52,5 @@ function listDevices(cb) {
 }
 
 module.exports = {
-  displayVideoDevices: displayVideoDevices
+  displayDevices: displayDevices
 };

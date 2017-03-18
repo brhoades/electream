@@ -7,13 +7,16 @@
   <body>
     <h1>Eletream</h1>
 
-    <select id="devices"></select>
+    Input Video Device: <select id="video_device"></select> <br />
+    Input Audio Device: <select id="audio_device"></select> <br />
+
+    Destination (rtmp): <input type="text" name="output">
   </body>
 
   <script>
     // You can also require other files to run in this process
     require('./renderer.js')
     const ffmpeg = require('./ffmpeg.js')
-    ffmpeg.displayVideoDevices('#devices');
+    ffmpeg.displayDevices("#video_device", "#audio_device");
   </script>
 </html>
