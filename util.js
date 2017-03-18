@@ -2,6 +2,7 @@
 const ffmpeg = require('./ffmpeg.js')
 const layout = require('./layout.js')
 const $ = require('jQuery');
+const {dialog} = require('electron').remote
 // returns the spawned child process.
 module.exports = {};
 
@@ -34,3 +35,8 @@ module.exports = {};
     }
   }
 })(module.exports);
+
+
+module.exports.getFile = function(container) {
+  $(container).val(dialog.showOpenDialog({properties: ['openFile']}));
+}

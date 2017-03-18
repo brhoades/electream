@@ -5,33 +5,31 @@ const os = require('os');
 
 
 function displayDevices(video_cont, audio_cont) {
-  listFFMPEGDevices(function(video, audio) {
+  listFFMPEGDevices(function(devices) {
     var vlist = $(video_cont);
     var alist = $(audio_cont);
     alist.html("");
     vlist.html("");
 
-    video.forEach(function(e) {
-      vlist.append("<option value=\"" + e + "\">" + e + "</option>");
-    });
-
-    audio.forEach(function(e) {
-      alist.append("<option value=\"" + e + "\">" + e + "</option>");
+    devices.forEach(function(e) {
+      let value = "<option value=\"" + e + "\">" + e + "</option>";
+      alist.append(value);
+      vlist.append(value);
     });
   });
 }
 
-// cb takes (array of video device names, array of audio device names)
+// cb takes (array of device names)
 function listFFMPEGDevices(cb) {
   listDevices(function(output) {
     var deviceregexmac = /\[([0-9]+)\]\s(.+)/g;
-    var deviceregexwin = /\s{2}"([A-Za-z0-9\- ]+)"/g;
+    var deviceregexwin = /()"([A-Za-z0-9\- \(\)]+)"/g;
     var deviceregex = null;
     var lastNumber = -1;
-    var video = [];
-    var audio = [];
+    var devices = [];
 
     var plat = os.platform();
+    console.log(plat);
 
     if(plat == "darwin") {
       deviceregex = deviceregexmac;
@@ -41,25 +39,20 @@ function listFFMPEGDevices(cb) {
 
     var match = deviceregex.exec(output);
     while(match != null) {
-      // ffmpeg provides numbers which reset on audio devices. Once we see an old number,
-      // we're doing audio.
-      if(lastNumber <= match[1] && audio.length == 0) {
-        video.push(match[2]);
-        lastNumber = match[1];
-      } else {
-        audio.push(match[2]);
-      }
+      devices.push(match[2]);
 
       match = deviceregex.exec(output);
     }
 
-    cb(video, audio);
+    cb(devices);
   });
 }
 
 // cb takes output
 function listDevices(cb) {
   var plat = os.platform();
+  var ffmpeg_path = $("#ffmpeg_path").val();
+  console.log(`${ffmpeg_path}`);
 
   if(plat == "darwin") {
     exec("ffmpeg -v info -f avfoundation -list_devices true -i \"\"", function(error, output, code) {
@@ -67,8 +60,11 @@ function listDevices(cb) {
     });
   } else if(plat == "win32") {
     let ffmpeg = $("#ffmpeg_path").val();
+    console.log(`FFMPEG PATH: ${ffmpeg}`);
 
     exec(`${ffmpeg} -list_devices true -f dshow -i dummy`, function(error, output, code) {
+      $("#pane_log_content").append(`ffmpeg probe stdout: <pre>${output}</pre><br>`);
+      $("#pane_log_content").append(`ffmpeg probe stderr: <pre>${error}</pre><br>`);
       cb(error);
     });
   }
@@ -90,7 +86,8 @@ function stream(video_device, audio_device, destination) {
       "-f", "flv", destination
     ]);
   } else if(plat == "win32") {
-    let ffmpeg = $("#ffmpeg_path").val();
+    ffmpeg = $("#ffmpeg_path").val();
+    console.log(`FFMPEG PATH: ${ffmpeg}`);
   }
 
   ffmpeg.stdout.on('data', function(data) {

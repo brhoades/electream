@@ -19,9 +19,9 @@
           <div class="pane">
             <div id="pane_main" class="pane-content">
               <h1>Eletream</h1>
-              Devices&nbsp;<span class="btn-primary icon icon-loop" onclick="refresh();"></span><br />
-              Input Video Device: <select id="video_device"></select> <br />
-              Input Audio Device: <select id="audio_device"></select> <br />
+              Devices&nbsp;<span class="btn-primary icon icon-arrows-ccw" onclick="refresh();"></span><br />
+              Input Video Device: <select class="save-field" id="video_device"></select> <br />
+              Input Audio Device: <select class="save-field" id="audio_device"></select> <br />
               <br />
               Destination (rtmp): <input type="text" class="save-field" id="output_stream"><br />
               <br />
@@ -32,7 +32,10 @@
 
             <div id="pane_config" class="pane-content">
               <h1>Eletream - Config</h1>
-              ffmpeg path: <input class="save-field" type="file" id="ffmpeg_path">
+              ffmpeg path<br>
+              <input class="save-field" id="ffmpeg_path" style="width: 90%;"> <button class="btn btn-primary" onclick="util.getFile('#ffmpeg_path');">Change</button>
+              <script>
+              </script>
             </div>
 
             <div id="pane_log" class="pane-content">
