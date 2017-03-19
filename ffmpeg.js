@@ -88,7 +88,23 @@ function stream(video_device, audio_device, destination) {
       "-f", "flv", destination
     ]);
   } else if(plat == "win32") {
-    ffmpeg = $("#ffmpeg_path").val();
+    let ffmpeg_proc = $("#ffmpeg_path").val();
+    let codec = "libx264";
+    let options = [];
+
+    ffmpeg = spawn(`${ffmpeg_proc}`, [
+      "-f", "dshow",
+      "-i", `video="${video_device}":audio="${audio_device}"`,
+      "-c:v", "h264_qsv",
+      "-preset:v", "fast",
+      "-tune", "nolatency",
+      "-async", "1",
+      "-acodec", "libmp3lame",
+      "-f", "flv", destination
+    ], {
+      windowsVerbatimArguments: true
+    });
+
     console.log(`FFMPEG PATH: ${ffmpeg}`);
   }
 
