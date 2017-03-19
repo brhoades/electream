@@ -25,9 +25,12 @@
               <br />
               Destination (rtmp): <input type="text" class="save-field" id="output_stream"><br />
               <br />
+              Status: <span id="stream_status" style="color: red;" class="icon icon-record"></span>
+              <br />
               <br />
               <button class="btn btn-large btn-default" style="width: 25%; float: left;" onclick="startStream();">Stream</button>
               <button class="btn btn-large btn-default" style="width: 25%; float: right;" onclick="stopStream();">Stop</button><br>
+
             </div>
 
             <div id="pane_config" class="pane-content">
@@ -80,6 +83,22 @@
       function save(field) {
         config.set($(field).attr('id'), $(field).val());
       }
+
+      const WatchJS = require("watchjs");
+      var watch = WatchJS.watch;
+
+      var streamStatus = function() {
+        var status = $("#stream_status");
+        if(util.proc == null) {
+          status.css("color", "red");
+        } else {
+          status.css("color", "green");
+        }
+
+        setTimeout(streamStatus, 500);
+      };
+
+      setTimeout(streamStatus, 500);
 
       layout.show("#pane_main");
 

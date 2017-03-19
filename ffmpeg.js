@@ -73,7 +73,7 @@ function listDevices(cb) {
 }
 
 // returns ffmpeg
-function stream(video_device, audio_device, destination) {
+function stream(video_device, audio_device, destination, stop_cb=null) {
   // TODO platform / custom ffmpeg
   var ffmpeg = null;
   var plat = os.platform();
@@ -122,6 +122,7 @@ function stream(video_device, audio_device, destination) {
     let msg = `ffmpeg exited with code '${code}'`;
 
     $("#pane_log_content").append(`${msg}<br />`);
+    if(stop_cb) { stop_cb(); }
   });
 
   return ffmpeg;

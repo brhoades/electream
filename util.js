@@ -7,32 +7,33 @@ const {dialog} = require('electron').remote
 module.exports = {};
 
 (function(exports) {
-  var ffmpeg_proc = null;
+  exports.proc = null;
 
   exports.start = function() {
-    if(ffmpeg_proc != null) {
+    if(exports.proc != null) {
       console.log("Stream is still running.");
-      return ffmpeg_proc;
+      return exports.proc;
     }
 
     var video = $("#video_device").val(),
         audio = $("#audio_device").val(),
         destination = $("#output_stream").val();
 
-    ffmpeg_proc = ffmpeg.stream(video, audio, destination);
+    exports.proc = ffmpeg.stream(video, audio, destination, function() {
+      exports.proc = null;
+    });
 
-    return ffmpeg_proc;
+    return exports.proc;
   }
 
   exports.stop = function() {
-    if(ffmpeg_proc != null) {
-      ffmpeg_proc.kill();
+    if(exports.proc != null) {
+      exports.proc.kill();
       console.log("Killed");
 
-      ffmpeg_proc = null;
-    } else {
-      console.log("Proc is null");
+      exports.proc = null;
     }
+    console.log("Proc is null");
   }
 })(module.exports);
 
