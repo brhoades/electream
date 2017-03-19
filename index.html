@@ -55,12 +55,28 @@
       const util = require('./util.js')
       const econfig = require('electron-config');
       const config = new econfig();
+      window.$ = window.jQuery = require('jQuery');
 
       function refresh() {
-        ffmpeg.displayDevices("#video_device", "#audio_device");
+        var devices = ["#video_device", "#audio_device"];
+        ffmpeg.displayDevices("#video_device", "#audio_device", function() {
+          devices.forEach(function(e) {
+            var saved = config.get($(e).attr("id"));
+            console.log(`saved: ${saved}`);
+
+            $(e).children().each(function(i, opt) {
+              opt = $(opt);
+              console.log(`opt value: ${opt.attr('value')}`);
+
+              if(opt.attr("value") == saved) {
+                opt.attr("selected", true);
+              }
+            });
+          });
+        });
+
       }
       refresh();
-      window.$ = window.jQuery = require('jQuery');
 
       layout.show("#pane_main");
 

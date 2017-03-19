@@ -4,7 +4,7 @@ const $ = require('jQuery');
 const os = require('os');
 
 
-function displayDevices(video_cont, audio_cont) {
+function displayDevices(video_cont, audio_cont, cb=null) {
   listFFMPEGDevices(function(devices) {
     var vlist = $(video_cont);
     var alist = $(audio_cont);
@@ -16,6 +16,8 @@ function displayDevices(video_cont, audio_cont) {
       alist.append(value);
       vlist.append(value);
     });
+
+    if(cb) { cb(); }
   });
 }
 
