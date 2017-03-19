@@ -33,7 +33,7 @@
             <div id="pane_config" class="pane-content">
               <h1>Eletream - Config</h1>
               ffmpeg path<br>
-              <input class="save-field" id="ffmpeg_path" style="width: 90%;"> <button class="btn btn-primary" onclick="util.getFile('#ffmpeg_path'); refresh();">Change</button>
+              <input class="save-field" id="ffmpeg_path" style="width: 90%;"> <button class="btn btn-primary" onclick="util.getFile('#ffmpeg_path'); refresh(); save('#ffmpeg_path');">Change</button>
               <script>
               </script>
             </div>
@@ -74,9 +74,12 @@
             });
           });
         });
-
       }
       refresh();
+
+      function save(field) {
+        config.set($(field).attr('id'), $(field).val());
+      }
 
       layout.show("#pane_main");
 
